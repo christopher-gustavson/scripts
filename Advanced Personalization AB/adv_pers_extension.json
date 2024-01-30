@@ -1,0 +1,76 @@
+{
+    "plugin_type": "widget",
+    "name": "Advanced Personalization ",
+    "edit_page_url": "https://christopher-gustavson.github.io/",
+    "form_schema": [{
+            "default_value": "",
+            "label": "Experiment ID",
+            "field_type": "text",
+            "options": null,
+            "name": "exId"
+        },
+        {
+            "default_value": "",
+            "label": "Audience ID",
+            "field_type": "text",
+            "options": null,
+            "name": "audId"
+        },
+        {
+            "default_value": "t",
+            "label": "Text, Image or Code",
+            "field_type": "toggle",
+            "options": {
+                "choices": [{
+                        "value": "t",
+                        "label": "Text"
+                    },
+                    {
+                        "value": "i",
+                        "label": "Image"
+                    },
+                    {
+                        "value": "c",
+                        "label": "Code"
+                    }
+                ]
+            },
+            "name": "elemChange"
+        },
+        {
+            "default_value": "",
+            "label": "Choose Element",
+            "field_type": "selector",
+            "options": null,
+            "name": "sel"
+        },
+        {
+            "default_value": "",
+            "label": "Text Personalized",
+            "field_type": "text",
+            "options": null,
+            "name": "persTxt"
+        },
+        {
+            "default_value": "",
+            "label": "Image Personalized",
+            "field_type": "image",
+            "options": null,
+            "name": "persImg"
+        },
+        {
+            "default_value": "<script>\n</script>\n<style>\n</style>",
+            "label": "Code Personalized",
+            "field_type": "html",
+            "options": null,
+            "name": "persCode"
+        }
+    ],
+    "description": "Simple single selector personalization based on specific audience ID for Text, Image or Code.",
+    "options": {
+        "html": "",
+        "css": "",
+        "apply_js": "const utils = window.optimizely.get('utils');\nconst state = window['optimizely'].get('state');\nif (Object.keys(state.getExperimentStates()).length)\n  if (state.getExperimentStates()[extension.exId].audiences[0].id == extension.audId)\n    utils.waitForElement('body')\n    .then(function(elem) {\n      if (extension.elemChange == 't')\n        document.querySelector(extension.sel).innerHTML = extension.persTxt;\n      else if (extension.elemChange == 'i')\n        document.querySelector(extension.sel).setAttribute('src',extension.persImg);\n      else if (extension.elemChange == 'c')\n        if (extension.persCode != '')\n\t\t\t\t\tvar c = document.createRange().createContextualFragment(extension.persCode);\n      \t\tc.querySelector('script').setAttribute('type','text/javascript');\n          c.querySelector('script').classList.add('opti-ext-jscode');\n      \t\tc.querySelector('style').setAttribute('type','text/css');\n          c.querySelector('style').classList.add('opti-ext-csscode');\n          document.head.appendChild(c);\n    });",
+        "undo_js": ""
+    }
+}

@@ -1,0 +1,136 @@
+{
+    "plugin_type": "widget",
+    "name": "Weather Data (Opti Visitor Location) (Current)",
+    "edit_page_url": "https://www.optimizely.com/",
+    "form_schema": [{
+            "options": null,
+            "name": "copy_clear",
+            "label": "Copy - Clear",
+            "default_value": "Clear",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "url_clear",
+            "label": "URL - Clear",
+            "default_value": "",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "image_clear",
+            "label": "Image - Clear",
+            "default_value": "",
+            "field_type": "image"
+        },
+        {
+            "options": null,
+            "name": "copy_clouds",
+            "label": "Copy - Clouds",
+            "default_value": "Clouds",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "url_clouds",
+            "label": "URL - Clouds",
+            "default_value": "",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "image_clouds",
+            "label": "Image - Clouds",
+            "default_value": "",
+            "field_type": "image"
+        },
+        {
+            "options": null,
+            "name": "copy_rain",
+            "label": "Copy - Rain",
+            "default_value": "Rain",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "url_Rain",
+            "label": "URL - Rain",
+            "default_value": "",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "image_rain",
+            "label": "Image - Rain",
+            "default_value": "",
+            "field_type": "image"
+        },
+        {
+            "options": null,
+            "name": "copy_snow",
+            "label": "Copy - Snow",
+            "default_value": "Snow",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "url_snow",
+            "label": "URL - Snow",
+            "default_value": "",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "image_snow",
+            "label": "Image - Snow",
+            "default_value": "",
+            "field_type": "image"
+        },
+        {
+            "options": null,
+            "name": "copy_default",
+            "label": "Copy - Default",
+            "default_value": "Default",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "url_default",
+            "label": "URL - Default",
+            "default_value": "",
+            "field_type": "text"
+        },
+        {
+            "options": null,
+            "name": "image_default",
+            "label": "Image - Default",
+            "default_value": "",
+            "field_type": "image"
+        },
+        {
+            "options": {
+                "mode": "rgba"
+            },
+            "name": "color",
+            "label": "Background Color",
+            "default_value": "rgba(0, 0, 0, 1)",
+            "field_type": "color"
+        },
+        {
+            "options": {
+                "mode": "rgba"
+            },
+            "name": "fcolor",
+            "label": "Font Color",
+            "default_value": "rgba(255, 255, 255, 1)",
+            "field_type": "color"
+        }
+    ],
+    "description": "Pull current weather data from users local area through Optimizely visitor location",
+    "options": {
+        "html": "<div class=\"opti-banner\" style=\"background-color: {{extension.color}};color: {{extension.fcolor}}\">\n  <span class=\"banner-copy\">Your Weather Is</span> <a href=\"{{extension.link}}\" style=\"color: {{extension.fcolor}}\">Learn More</a>\n</div>",
+        "css": ".opti-banner {\n  color: #242424;\n  padding: 8px;\n\tposition: relative;\n  top: 0;\n  z-index: 100000000;\n  width: 100%;\n  font-size:16px;\n  text-align: center;\n  height: 35px;\n  font-family:arial,sans-serif;\n}\n\n.opti-banner a {\n\ttext-decoration: underline;\n  color: #242424;\n  margin-left:.5em;\n}",
+        "apply_js": "var utils = window.optimizely.get('utils');\nString.prototype.toSentenceCase = function() {\n    return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();\n};\nif (window.optimizely.get('visitor').hasOwnProperty('location')) {\n    var opti_city = window.optimizely.get('visitor').location.city.toSentenceCase();\n    var opti_region = window.optimizely.get('visitor').location.region;\n    var opti_country = window.optimizely.get('visitor').location.country;\n}\n\nvar apiKey = \"672d355c19ee918cc22285338cf80635\";\n\nutils.waitForElement('body').then(function(elem) {\n    var isLoaded = false;\n    console.log('opti_city', opti_city);\n    var html = widget.$html;\n    elem.insertAdjacentHTML('beforebegin',html);\n    fetch('https://api.openweathermap.org/data/2.5/weather?q=' + opti_city + ',' + opti_region + ',' + opti_country + '&units=imperial&appid=' + apiKey)\n        .then(response => response.json())\n        .then(data => {\n            var weatherResponse = data;\n            if (weatherResponse.weather[0].main != '' && !isLoaded) {\n                var img, copy, url, ctaCopy;\n                console.log(\"weatherResponse.weather[0].main\", weatherResponse.weather[0].main);\n                if (weatherResponse.weather[0].main == \"Clear\") {\n                    copy = extension.copy_clear;\n                    img = extension.image_clear;\n                    url = extension.url_clear;\n                    ctaCopy = \"Shop Clear\";\n                } else if (weatherResponse.weather[0].main == \"Rain\") {\n                    copy = extension.copy_rain;\n                    img = extension.image_rain;\n                    url = extension.url_rain;\n                    ctaCopy = \"Shop Rain\";\n                } else if (weatherResponse.weather[0].main == \"Clouds\") {\n                    copy = extension.copy_clouds;\n                    img = extension.image_clouds;\n                    url = extension.url_clouds;\n                    ctaCopy = \"Shop Clouds\";\n                } else if (weatherResponse.weather[0].main == \"Snow\") {\n                    copy = extension.copy_snow;\n                    img = extension.image_snow;\n                    url = extension.url_snow;\n                    ctaCopy = \"Shop Snow\";\n                } else {\n                    copy = extension.copy_default;\n                    img = extension.image_default;\n                    url = extension.url_default;\n                    ctaCopy = \"Shop Gear\";\n                }\n              \tdocument.querySelector('.opti-banner .banner-copy').innerHTML = copy;\n              \tdocument.querySelector('.opti-banner a').href = url;\n              \tdocument.querySelector('.opti-banner a').innerHTML = ctaCopy;\n                isLoaded = true;\n            }\n        });\n});",
+        "undo_js": "var extensionHTML = document.querySelector('.opti-banner');\nif(extensionHTML) extensionHTML.remove();"
+    }
+}

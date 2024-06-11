@@ -1,18 +1,25 @@
-// ensure below object is defined somewhere within web pixel
+// ensure below script is defined somewhere within web pixel
 <script type="text/javascript">
-Object.defineProperty(self, "webPixelsManager", {
-    value: {
-        createShopifyExtend: ()=>({
-            extend: async(e,t)=>{
-                if ("WebPixel::Render" !== e)
-                    throw new H;
-                K = t
-            }
-        })
-    },
-    enumerable: !0,
-    writable: !1
-});
+    class H extends Error {
+        constructor(...e) {
+            super(...e),
+                this.message = "Invalid Extension Point"
+        }
+    }
+    let K;
+    Object.defineProperty(self, "webPixelsManager", {
+        value: {
+            createShopifyExtend: () => ({
+                extend: async(e, t) => {
+                    if ("WebPixel::Render" !== e)
+                        throw new H;
+                    K = t
+                }
+            })
+        },
+        enumerable: !0,
+        writable: !1
+    });
 </script>
 
 // add below script tag to custom pixel
@@ -45,21 +52,19 @@ Object.defineProperty(self, "webPixelsManager", {
                         snapshots: [{
                             decisions: [],
                             events: [{
-                                    // set unique event key and entity_id
-                                    key: "trackRevenue",
-                                    entity_id: 00000000000,
-                                    timestamp: new Date(event.timestamp).getTime(),
-                                    uuid: event.id,
-                                    revenue: event.data.checkout.totalPrice.amount * 100 // in cents
-                                },
-                                {
-                                    // set unique event key and entity_id
-                                    key: "orderCompleted",
-                                    entity_id: 00000000000,
-                                    timestamp: new Date(event.timestamp).getTime(),
-                                    uuid: event.id
-                                }
-                            ]
+                                // set unique event key and entity_id
+                                key: "trackRevenue",
+                                entity_id: 00000000000,
+                                timestamp: new Date(event.timestamp).getTime(),
+                                uuid: event.id,
+                                revenue: event.data.checkout.totalPrice.amount * 100 // in cents
+                            }, {
+                                // set unique event key and entity_id
+                                key: "orderCompleted",
+                                entity_id: 00000000000,
+                                timestamp: new Date(event.timestamp).getTime(),
+                                uuid: event.id
+                            }]
                         }]
                     }],
                     anonymize_ip: true,

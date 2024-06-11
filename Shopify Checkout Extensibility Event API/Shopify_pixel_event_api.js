@@ -25,16 +25,16 @@ shopify.extend('WebPixel::Render', function(api) {
                 snapshots: [{
                     decisions: [],
                     events: [{
+                            // set unique event key and entity_id
                             key: "trackRevenue",
-                            // set unique Event ID
                             entity_id: 00000000000,
                             timestamp: new Date(event.timestamp).getTime(),
                             uuid: event.id,
                             revenue: event.data.checkout.totalPrice.amount * 100 // in cents
                         },
                         {
+                            // set unique event key and entity_id
                             key: "orderCompleted",
-                            // set unique Event ID
                             entity_id: 00000000000,
                             timestamp: new Date(event.timestamp).getTime(),
                             uuid: event.id

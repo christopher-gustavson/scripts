@@ -17,7 +17,8 @@ shopify.extend('WebPixel::Render', function(api) {
 
     analytics.subscribe('checkout_completed', (event) => {
         const payload = {
-            account_id: "11111111111",
+            // set Optimizely Account ID
+            account_id: "00000000000",
             visitors: [{
                 visitor_id: optimizelyEndUserId,
                 attributes: [],
@@ -25,14 +26,16 @@ shopify.extend('WebPixel::Render', function(api) {
                     decisions: [],
                     events: [{
                             key: "trackRevenue",
-                            entity_id: 11111111111,
+                            // set unique Event ID
+                            entity_id: 00000000000,
                             timestamp: new Date(event.timestamp).getTime(),
                             uuid: event.id,
                             revenue: event.data.checkout.totalPrice.amount * 100 // in cents
                         },
                         {
                             key: "orderCompleted",
-                            entity_id: 11111111111,
+                            // set unique Event ID
+                            entity_id: 00000000000,
                             timestamp: new Date(event.timestamp).getTime(),
                             uuid: event.id
                         }
